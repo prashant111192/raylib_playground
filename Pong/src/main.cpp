@@ -20,12 +20,20 @@ void Game_over(int Player_score, int CPU_score)
     // WaitTime(3); // This does not work, prefer to use frame based timers
     EndDrawing();
     int frames = 0;
-    while (frames < 180) // 180 frames at 60 FPS = 3 seconds
+    while (frames < (60*5)) // 180 frames at 60 FPS = 3 seconds
     {
         BeginDrawing();
         ClearBackground(Green);
         DrawText(TextFormat("Player Score: %i", Player_score), 20, 20, 50, WHITE);
         DrawText(TextFormat("CPU Score: %i", CPU_score), 20, 80, 50, WHITE);
+        if (Player_score > CPU_score)
+        {
+            DrawText(TextFormat("You Win"), 20, 140, 50, WHITE);
+        }
+        else
+        {
+            DrawText(TextFormat("You Lose"), 20, 140, 50, WHITE);
+        }
         EndDrawing();
         frames++;
     }
@@ -115,25 +123,25 @@ int main(void)
                     // COllision detected
                     balls[i].vel_x *= -1;
                     // allowing the paddle movement to influence the balls[i]
-                    float pos_y_diff = paddle_player.pos_y - y_player_prev;
-                    float vel_y = pos_y_diff / (GetFrameTime() * 1000);
-                    if (vel_y != 0)
-                    {
-                        balls[i].vel_y += vel_y * 0.1;
-                        // std::cout << "pos_y_diff: " << pos_y_diff << "vel_y: " << vel_y << "balls[i]_vel_y: " << balls[i].vel_y << std::endl;
-                    }
+                    // float pos_y_diff = paddle_player.pos_y - y_player_prev;
+                    // float vel_y = pos_y_diff / (GetFrameTime() * 1000);
+                    // if (vel_y != 0)
+                    // {
+                    //     balls[i].vel_y += vel_y * 0.1;
+                    //     // std::cout << "pos_y_diff: " << pos_y_diff << "vel_y: " << vel_y << "balls[i]_vel_y: " << balls[i].vel_y << std::endl;
+                    // }
                 }
                 if (CheckCollisionCircleRec(Vector2{balls[i].pos_x, balls[i].pos_y}, balls[i].radius, Rectangle{paddle_CPU.pos_x, paddle_CPU.pos_y, paddle_CPU.width, paddle_CPU.height}))
                 {
                     // COllision detected
                     balls[i].vel_x *= -1;
-                    float pos_y_diff = paddle_CPU.pos_y - y_CPU_prev;
-                    float vel_y = pos_y_diff / (GetFrameTime() * 1000);
-                    if (vel_y != 0)
-                    {
-                        balls[i].vel_y += vel_y * 0.1;
-                        // std::cout << "pos_y_diff: " << pos_y_diff << "vel_y: " << vel_y << "balls[i]_vel_y: " << balls[i].vel_y << std::endl;
-                    }
+                    // float pos_y_diff = paddle_CPU.pos_y - y_CPU_prev;
+                    // float vel_y = pos_y_diff / (GetFrameTime() * 1000);
+                    // if (vel_y != 0)
+                    // {
+                    //     balls[i].vel_y += vel_y * 0.1;
+                    //     // std::cout << "pos_y_diff: " << pos_y_diff << "vel_y: " << vel_y << "balls[i]_vel_y: " << balls[i].vel_y << std::endl;
+                    // }
                 }
             }
         }
@@ -178,7 +186,7 @@ int main(void)
             paddle_player.paddle_level_upgrade(&paddle_height);
             paddle_CPU.paddle_level_upgrade(&paddle_height);
             level++;
-            if (level == 10)
+            if (level == 11)
             {
                 EndDrawing();
                 Game_over(Player_score, CPU_score);
